@@ -1,22 +1,7 @@
+
 var http = require('http');
-var mongoose = require('mongoose');
 var parseString = require('xml2js').parseString;
-
-mongoose.connect('mongodb://localhost:27017/test');
-var Schema = mongoose.Schema;
-var carSchema = new Schema({
-  id: { type : String , unique : true, required : true},
-  year: Number,
-  make: String,
-  model: String,
-  trans: String,
-  hwy: Number,
-  city: Number
-});
-
-var Car = mongoose.model('Car', carSchema);
-
-
+var Car = require('./database/car');
 
 var options = {
   host: 'www.fueleconomy.gov',
@@ -46,7 +31,12 @@ callback = function(response) {
           model: input.model[0],
           trans: input.trany[0],
           hwy: Number(input.highway08[0]),
-          city: Number(input.city08[0])
+          city: Number(input.city08[0]),
+          comb: Number(input.comb08[0]),
+          drive: input.drive[0],
+          fueltype: input.fuelType[0],
+          fueltype1: input.fuelType1[0],
+          class: input.VClass[0]
         });
         console.log(car.save());
       })
@@ -58,8 +48,8 @@ callback = function(response) {
   });
 }
 
-var START_I = 20000;
-var MAX_I = 20001;
+var START_I = 9850;
+var MAX_I = 50000;
 function requestCar(i){
   console.log(i);
   options.path = "/ws/rest/vehicle/" + i;
@@ -70,9 +60,14 @@ function requestCar(i){
       requestCar(i+1);
     }
   
-    else
+    else{
       console.log("ALL Finished");  
+      process.exit();
+    }
+      
   }, 200);
 }
 
 requestCar(START_I);
+
+

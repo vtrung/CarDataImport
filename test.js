@@ -1,24 +1,45 @@
+//var mongoose = require('mongoose');
 var mongoose = require('mongoose');
-var parseString = require('xml2js').parseString;
+mongoose.Promise = global.Promise;
+mongoose.connect('mongodb://localhost/test', { useMongoClient: true });
 
-mongoose.connect('mongodb://localhost:27017/test');
-//var connection = mongoose.createConnection('mongodb://localhost:27017/test');
-var Schema = mongoose.Schema;
-var carSchema = new Schema({
-  id: { type : String , unique : true, required : true},
-  year: Number
+var Cat = mongoose.model('Cat', { name: String });
+
+var kitty = new Cat({ name: 'Zildjian' });
+kitty.save(function (err) {
+  if (err) {
+    console.log(err);
+  } else {
+    console.log('meow');
+  }
 });
+//console.log(mongoose);
+//mongoose.connect('mongodb://localhost:27017/test');
+//mongoose.connect('mongodb://localhost/test', { useMongoClient: true });
+// var uri = "mongodb://localhost/test";
+// var db = mongoose.createConnection(uri);
 
-var Car = mongoose.model('Car', carSchema);
+// console.log(db);
 
-var car = new Car({
-    id: '102991',
-    year: 11
-  });
+// db.close();
 
-  car.save(function(err, suc){
-    if (err) return console.error(err);
-    console.log(suc);
-  });
+//var connection = mongoose.createConnection('mongodb://localhost:27017/test');
+// var Schema = mongoose.Schema;
+// var carSchema = new Schema({
+//   id: { type : String , unique : true, required : true},
+//   year: Number
+// });
 
-  return;
+// var Car = mongoose.model('Car', carSchema);
+
+// var car = new Car({
+//     id: '102991',
+//     year: 11
+//   });
+
+//   car.save(function(err, suc){
+//     if (err) return console.error(err);
+//     console.log(suc);
+//   });
+
+//process.exit();
